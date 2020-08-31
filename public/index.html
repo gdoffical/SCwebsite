@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocioCoders Website</title>
+    <meta description="">
+    <meta property="og:title" content="SocioCoders" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://SocioCoders.ga/" />
+    <meta property="og:description" content="" />
+
+    <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+    <link href="https://fonts.googleapis.com/css?family=Audiowide|BioRhyme|Exo+2:400,700" rel='stylesheet'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+        crossorigin="anonymous">
+
+    <!-- <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> -->
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel='stylesheet' href='./style.css'>
+    <script>
+    let recognizer;
+    let words;
+    const wordList = ["one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go"];
+    let modelLoaded = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const wrapperElement = document.getElementById('sp-cmd-wrapper');
+        for (let word of wordList) {
+            wrapperElement.innerHTML += `<div class='col-3 col-md-6'><div id='word-${word}' class='badge'>${word}</div></div>`;
+        };
+
+        document.getElementById("audio-switch").addEventListener('change', (event) => {
+            if(event.target.checked) {
+                if(modelLoaded) {
+                    startListening();
+                }else{
+                    loadModel();
+                }
+            } else {
+                stopListening();
+            }
+        });
+    });
+
+    async function loadModel() {
+        // Show the loading element
+        const loadingElement = document.getElementById('demo-loading');
+        loadingElement.classList.remove('hidden');
+
+        // When calling `create()`, you must provide the type of the audio input.
+        // - BROWSER_FFT uses the browser's native Fourier transform.
+        recognizer = speechCommands.create("BROWSER_FFT");
+        await recognizer.ensureModelLoaded()
+
+        words = recognizer.wordLabels();
+        modelLoaded = true;
+
+        // Hide the loading element
+        loadingElement.classList.add('hidden');
+        startListening();
+    }
+
+    function startListening() {
+        recognizer.listen(({scores}) => {
+            scores = Array.from(scores).map((s, i) => ({score: s, word: words[i]}));
+            scores.sort((s1, s2) => s2.score - s1.score);
+            const elementId = `word-${scores[0].word}`;
+            document.getElementById(elementId).classList.add('active');
+            setTimeout(() => {
+                document.getElementById(elementId).classList.remove('active');
+            }, 2500);
+        },
+        {
+            probabilityThreshold: 0.70
+        });
+    }
+
+    function stopListening(){
+        recognizer.stopListening();
+    }
+
+    </script>
+
+    <style type="text/css">
+        .hidden {
+            display: none;
+        }
+
+        .active {
+            background-color: #090;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="demo">
+       Please enable the microphone checkbox and authorize this site to access the microphone.
+        <br />
+        Once the process finished loading speak one of the word bellow and see the magic happen.
+        <br /><br />
+        <div>
+            <label class="form-switch">
+                <input type="checkbox" id="audio-switch">
+                Microphone
+            </label>
+            <div id="demo-loading" class="hidden">Loading...</div>
+        </div>
+        <div id="sp-cmd-wrapper" class="grid"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    <script src="https://unpkg.com/@tensorflow-models/speech-commands"></script>
+</body>
+</html>
+
