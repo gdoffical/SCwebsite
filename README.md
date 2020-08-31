@@ -13,4 +13,4 @@ This is the Official Repository Of SocioCoders Website.
 
 ## ToDo
 * Update This ReadMe And Make It look nice by using the readme template linked below
-(https://github.com/roshanlam/ReadMeTemplate)[ReadMe]
+[ReadMe](https://github.com/roshanlam/ReadMeTemplate)
