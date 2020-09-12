@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title>SocioCoders Survey</title>
+      <meta name="description" content="">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="theme.css">
+      <link rel="stylesheet" href="main.css">
+    </head>
+  <body>
+      <div class="container">
+          <h1>SocioCoders Survey</h1>
+          <p class="page-description">A tiny app that allows you to take notes by recording your voice</p>
+          <h3 class="no-browser-support">Sorry, Your Browser Doesn't Support the Web Speech API. Try Opening This In Google Chrome.</h3>
+          <div class="app">
+              <h3>Welcome To Our Survey</h3>
+              <div class="input-single">
+                <textarea id="Survey-textarea" placeholder="Click The Start Survey Button To Begin. Answer the questions by using your voice unless you are mute then please type in the answers, we are working on a sign lanaguage intranslater program." rows="6"></textarea>
+                </div>
+              <button id="start-record-btn" title="Start Recording" style="background:#001f3f">Start The Survey</button>
+              <button id="pause-record-btn" title="Pause Recording" style="background:#001f3f">Stop The Survey</button>
+              <button id="submit-survey-btn" title="Save & Submit Survey" style="background:#001f3f">Submit The Survey</button>
+              <p id="recording-instructions">Press the <strong>Start The Survey</strong> button and allow access.</p>
+        </div>
+       </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+       <script src="main.js"></script>
+  </body>
+</html>
